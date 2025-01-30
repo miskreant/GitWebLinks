@@ -88,7 +88,12 @@ describe('GetLinkCommand', () => {
             .returns(Promise.resolve(undefined));
 
         createUrl = sinon.stub(handler, 'createUrl');
-        createUrl.resolves({ url: 'test', relativePath: 'path', selection: '' });
+        createUrl.resolves({
+            url: 'test',
+            relativePath: 'path',
+            filePath: '/foo/bar/path',
+            selection: ''
+        });
 
         link = undefined;
         sinon.stub(env, 'clipboard').value({
@@ -227,6 +232,7 @@ describe('GetLinkCommand', () => {
         createUrl.resolves({
             url: 'http://example.com/foo/bar',
             relativePath: '/foo/bar',
+            filePath: '/foo/bar',
             selection: ''
         });
 
@@ -247,6 +253,7 @@ describe('GetLinkCommand', () => {
         createUrl.resolves({
             url: 'http://example.com/foo/bar',
             relativePath: '/foo/bar',
+            filePath: '/foo/bar',
             selection: '#L1-3'
         });
 
@@ -256,6 +263,7 @@ describe('GetLinkCommand', () => {
         expect(link).to.equal('[/foo/bar#L1-3](http://example.com/foo/bar)');
     });
 
+    // @TODO: Add a test for 'vscode' format
     it('should format the copied link as markdown without a code block when the link format is "markdownWithPreview" but the link should not include the selection.', async () => {
         setLinkFormat('markdownWithPreview');
 
@@ -269,6 +277,7 @@ describe('GetLinkCommand', () => {
         createUrl.resolves({
             url: 'http://example.com/foo/bar',
             relativePath: '/foo/bar',
+            filePath: '/foo/bar/path',
             selection: ''
         });
 
@@ -294,6 +303,7 @@ describe('GetLinkCommand', () => {
         createUrl.resolves({
             url: 'http://example.com/foo/bar',
             relativePath: '/foo/bar',
+            filePath: '/foo/bar/path',
             selection: '#L2-4'
         });
 
@@ -319,6 +329,7 @@ describe('GetLinkCommand', () => {
         createUrl.resolves({
             url: 'http://example.com/foo/bar',
             relativePath: '/foo/bar',
+            filePath: '/foo/bar/path',
             selection: '#L1-3'
         });
 
@@ -466,6 +477,7 @@ describe('GetLinkCommand', () => {
             createUrl.resolves({
                 url: 'http://example.com/foo/bar',
                 relativePath: '/foo/bar',
+                filePath: '/foo/bar/path',
                 selection: '#L1-3'
             });
 
@@ -483,6 +495,7 @@ describe('GetLinkCommand', () => {
             createUrl.resolves({
                 url: 'http://example.com/foo/bar',
                 relativePath: '/foo/bar',
+                filePath: '/foo/bar/path',
                 selection: '#L1-3'
             });
 
@@ -505,6 +518,7 @@ describe('GetLinkCommand', () => {
             createUrl.resolves({
                 url: 'http://example.com/foo/bar',
                 relativePath: '/foo/bar',
+                filePath: '/foo/bar/path',
                 selection: '#L1-3'
             });
 
@@ -532,6 +546,7 @@ describe('GetLinkCommand', () => {
             createUrl.resolves({
                 url: 'http://example.com/foo/bar',
                 relativePath: '/foo/bar',
+                filePath: '/foo/bar/path',
                 selection: '#L1-3'
             });
 

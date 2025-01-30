@@ -76,7 +76,7 @@ describe('Settings', () => {
             expect(settings.getLinkFormat()).to.equal('raw');
         });
 
-        ['raw', 'markdown', 'markdownWithPreview'].forEach((value) => {
+        ['raw', 'markdown', 'markdownWithPreview', 'vscode'].forEach((value) => {
             it(`should return "${value}" when stored value is "${value}".`, () => {
                 setup({ linkFormat: value });
                 expect(settings.getLinkFormat()).to.equal(value);

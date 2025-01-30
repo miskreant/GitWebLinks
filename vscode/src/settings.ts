@@ -59,6 +59,9 @@ export class Settings {
             case 'markdownWithPreview':
                 return 'markdownWithPreview';
 
+            case 'vscode':
+                return 'vscode';
+
             default:
                 return 'raw';
         }

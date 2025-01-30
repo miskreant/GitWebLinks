@@ -8,7 +8,7 @@ export type LinkType = 'commit' | 'branch' | 'defaultBranch';
 /**
  * The format to use when copying a link.
  */
-export type LinkFormat = 'raw' | 'markdown' | 'markdownWithPreview';
+export type LinkFormat = 'raw' | 'markdown' | 'markdownWithPreview' | 'vscode';
 
 /**
  * Information about a Git repository.

@@ -204,12 +204,14 @@
 					"enum": [
 						"raw",
 						"markdown",
-						"markdownWithPreview"
+						"markdownWithPreview",
+						"vscode"
 					],
 					"enumDescriptions": [
 						"The raw URL is copied.",
 						"The URL is formatted as a markdown link.",
-						"The URL is formatted as a markdown link with the selected code in a code block."
+						"The URL is formatted as a markdown link with the selected code in a code block.",
+						"The URL is formatted as a VSCode link."
 					]
 				},
 				"gitweblinks.defaultBranch": {

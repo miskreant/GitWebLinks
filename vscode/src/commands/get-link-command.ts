@@ -132,24 +132,28 @@ export class GetLinkCommand {
                                     // selection was included in the link.
                                     (editor && selection
                                         ? `\n${getCodeBlockForSelection(editor, selection)}`
-                                        : '')
+                                        : ''),
+                                vscode: createVSCodeLink(result) //info.uri.fsPath
                             };
 
                             format = this.settings.getLinkFormat();
                             copiedText = formats[format];
                             await env.clipboard.writeText(copiedText);
 
-                            actions = [
-                                {
+                            actions = [];
+
+                            // If the link is in a browseable format, add an action to open it in the browser
+                            if (copiedText !== formats.vscode) {
+                                actions.push({
                                     title: STRINGS.getLinkCommand.openInBrowser,
                                     action: 'open'
-                                }
-                            ];
+                                });
+                            }
 
                             // If we didn't copy the raw link, add an action to copy it.
                             if (copiedText !== formats.raw) {
                                 actions.push({
-                                    title: STRINGS.getLinkCommand.copyAsRawUrl,
+                                    title: STRINGS.getLinkCommand.copyAsRawUrl(info.handler.name),
                                     action: 'copy-raw'
                                 });
                             }
@@ -183,9 +187,21 @@ export class GetLinkCommand {
                                 });
                             }
 
+                            // If we didn't copy the vscode link, add an action to copy it
+                            if (copiedText !== formats.vscode) {
+                                actions.push({
+                                    title: STRINGS.getLinkCommand.copyAsVSCodeLink,
+                                    action: 'copy-vscode'
+                                });
+                            }
+
+                            // @TODO: Make this less hacky
+                            const formatName =
+                                copiedText !== formats.vscode ? info.handler.name : 'VS Code';
+
                             void window
                                 .showInformationMessage<ActionMessageItem>(
-                                    STRINGS.getLinkCommand.linkCopied(info.handler.name),
+                                    STRINGS.getLinkCommand.linkCopied(formatName),
                                     ...actions
                                 )
                                 .then((x) => this.onNotificationItemClick(x, formats));
@@ -450,6 +466,12 @@ export class GetLinkCommand {
                     void env.clipboard.writeText(linkFormats.markdownWithPreview);
                 }
                 break;
+
+            case 'copy-vscode':
+                if (linkFormats) {
+                    void env.clipboard.writeText(linkFormats.vscode);
+                }
+                break;
         }
     }
 }
@@ -462,6 +484,18 @@ export class GetLinkCommand {
  */
 function createMarkdownLink(result: CreateUrlResult): string {
     return `[${result.relativePath}${result.selection ?? ''}](${result.url})`;
+}
+
+/**
+ * Creates a markdown-formatted link for the URL that was created.
+ *
+ * @param result The result of creating the link.
+ * @returns The markdown link.
+ */
+function createVSCodeLink(result: CreateUrlResult): string {
+    const path = result.filePath.replace(/^\//, '');
+    const filename = result.filePath.split('/').pop();
+    return `[${filename}](vscode://file/${path}${result.selection ?? ''})`;
 }
 
 /**
@@ -562,5 +596,11 @@ interface ActionMessageItem extends MessageItem {
     /**
      * The action to perform.
      */
-    action: 'settings' | 'open' | 'copy-raw' | 'copy-markdown' | 'copy-markdown-with-preview';
+    action:
+        | 'settings'
+        | 'open'
+        | 'copy-raw'
+        | 'copy-markdown'
+        | 'copy-markdown-with-preview'
+        | 'copy-vscode';
 }

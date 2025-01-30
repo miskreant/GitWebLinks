@@ -183,7 +183,8 @@ export class LinkHandler {
             this.queryModifications.filter((x) => x.pattern.test(file.filePath))
         );
 
-        return { url, relativePath, selection };
+        const filePath = file.filePath;
+        return { url, relativePath, selection, filePath };
     }
 
     /**
@@ -677,6 +678,11 @@ export interface CreateUrlResult {
      * The path of the file used in the URL, relative to the root of the repository.
      */
     readonly relativePath: string;
+
+    /**
+     * The absolute path of the file
+     */
+    readonly filePath: string;
 
     /**
      * The selection that was appended to the URL.
